@@ -7,4 +7,5 @@ A drink recommendation application that takes your Untappd drink history and fin
 To run:
 
 npm install
+
 npm run dev
