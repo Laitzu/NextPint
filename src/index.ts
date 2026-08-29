@@ -1,3 +1,5 @@
+import { parseUntappdCSV } from "./services/UntappdDataParser";
+
 const uploadButton = document.getElementById("upload-button");
 
 uploadButton?.addEventListener("click", handleFileUpload);
@@ -12,7 +14,7 @@ function handleFileUpload() {
     
     reader.onload = (e) => {
         const content = e.target?.result as string;
-        console.log(content);
+        // parseUntappdCSV(content);
     };
     reader.readAsText(file);
 }
