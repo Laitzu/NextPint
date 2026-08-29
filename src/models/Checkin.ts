@@ -1,9 +1,9 @@
-import type { Drink } from './Drink';
+import type { UntappdDrink } from './UntappdDrink';
 
 export interface Checkin {
     untappdCheckinId?: string;
 
-    drink: Drink;
+    drink: UntappdDrink;
 
     rating: number;
     checkinDate: Date;
