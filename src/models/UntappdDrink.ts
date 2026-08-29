@@ -1,4 +1,4 @@
-export interface Drink {
+export interface UntappdDrink {
   untappdId?: string;
 
   name: string;
