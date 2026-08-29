@@ -1,39 +1,28 @@
-export function parseUntappdCSV(content: string) {
+import type { UntappdDrink } from '../models/UntappdDrink';
+import type { Checkin } from '../models/Checkin';
+
+export function parseUntappdCSV(content: string) : Checkin[] {
 
     const columns: number = 32
+    const checkInList: Checkin[] = [];
 
-    const beerNames: string[] = [];
-    const breweryNames: string[] = [];
-    const beerTypes: string[] = [];
-    const abvs: number[] = [];
-    const ibus: number[] = [];
-    const comments: string[] = [];
-    const venueNames: string[] = [];
-    const venueCities: string[] = [];
-    const venueStates: string[] = [];
-    const venueCountries: string[] = [];
-    const venueLatitudes: number[] = [];
-    const venueLongitudes: number[] = [];
-    const ratings: number[] = [];
-    const createdAtDates: Date[] = [];
-    const checkinIds: string[] = [];
-    const beerIds: string[] = [];
-    const breweryIds: string[] = [];
-    const breweryCountries: string[] = [];
-    const breweryCities: string[] = [];
-    const breweryStates: string[] = [];
-    const flavourProfiles: string[] = [];
-    const purchaseVenues: string[] = [];
-    const servingTypes: string[] = [];
-    const photoUrls: string[] = [];
-    const globalRatings: number[] = [];
-    const globalWeightedRatings: number[] = [];
-    const taggedFriends: string[] = [];
-    const totalToasts: number[] = [];
-    const totalComments: number[] = [];
-    const checkinUrls: string[] = [];
-    const beerUrls: string[] = [];
-    const breweryUrls: string[] = [];
+    // Lets first get the column numbers for the fields we care about.
+    // This way the order of columns can change without breaking the parser.
+    const headerLine: string = content.split("\n")[0];
+    const headerFields: string[] = headerLine.split(",");
+
+    const drink_id_col: number = headerFields.indexOf("bid");
+    const drink_name_col: number = headerFields.indexOf("beer_name");
+    const brewery_name_col: number = headerFields.indexOf("brewery_name");
+    const brewery_country_col: number = headerFields.indexOf("brewery_country");
+    const drink_type_col: number = headerFields.indexOf("beer_type");
+    const drink_abv_col: number = headerFields.indexOf("beer_abv");
+    const drink_ibu_col: number = headerFields.indexOf("beer_ibu");
+
+    const checkin_id_col: number = headerFields.indexOf("checkin_id");
+    const rating_col: number = headerFields.indexOf("rating_score");
+    const checkin_date_col: number = headerFields.indexOf("created_at");
+    const comment_col: number = headerFields.indexOf("comment");
 
     // Ugly parsing of CSV of my own creation because some fields contain commas and quotes.
 
@@ -77,5 +66,31 @@ export function parseUntappdCSV(content: string) {
             field += char;
             lastChar = char;
         }
+
+        // After parsing the line, populate the objects with the parsed data.
+        const untappdDrink: UntappdDrink = {
+            drinkId: parsedLine[drink_id_col],
+
+            name: parsedLine[drink_name_col],
+            breweryName: parsedLine[brewery_name_col],
+            breweryCountry: parsedLine[brewery_country_col],
+
+            drinkType: parsedLine[drink_type_col],
+
+            abv: parseFloat(parsedLine[drink_abv_col]),
+            ibu: parseFloat(parsedLine[drink_ibu_col])
+        };
+        const checkin: Checkin = {
+            untappdCheckinId: parsedLine[checkin_id_col],
+
+            drink: untappdDrink,
+
+            rating: parseFloat(parsedLine[rating_col]),
+            checkinDate: new Date(parsedLine[checkin_date_col]),
+
+            comment: parsedLine[comment_col]
+        };
+        checkInList.push(checkin);
     }
+    return checkInList;
 }

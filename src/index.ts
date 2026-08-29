@@ -1,3 +1,4 @@
+import type { Checkin } from "./models/Checkin";
 import { parseUntappdCSV } from "./services/UntappdDataParser";
 
 const uploadButton = document.getElementById("upload-button");
@@ -14,7 +15,8 @@ function handleFileUpload() {
     
     reader.onload = (e) => {
         const content = e.target?.result as string;
-        // parseUntappdCSV(content);
+        const checkins: Checkin[] = parseUntappdCSV(content);
+        console.log(checkins);
     };
     reader.readAsText(file);
 }

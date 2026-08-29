@@ -1,11 +1,11 @@
 export interface UntappdDrink {
-  untappdId?: string;
+  drinkId?: string;
 
   name: string;
   breweryName: string;
   breweryCountry?: string;
 
-  beerType: string;
+  drinkType: string;
 
   abv?: number;
   ibu?: number;

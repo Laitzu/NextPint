@@ -7,7 +7,7 @@ export interface RetailDrink {
   breweryName?: string;
   breweryCountry?: string;
 
-  beerType: string;
+  drinkType: string;
 
   abv?: number;
 }
