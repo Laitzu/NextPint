@@ -17,3 +17,20 @@ export function analyzeBeerStyles(checkins: Checkin[]): Map<string, number> {
         return styleCount;
     }
 
+
+export function analyzeABVPreference(checkins: Checkin[]): number {
+    let sumRatingTimesABV: number = 0;
+    let sumOfRatings: number = 0;
+
+    checkins.forEach(checkin => {
+        if(checkin.rating && checkin.drink.abv) {
+            sumRatingTimesABV += checkin.drink.abv * checkin.rating;
+            sumOfRatings += checkin.rating;
+        }
+    });
+    if(sumOfRatings == 0) {
+        return 0;
+    }
+
+    return sumRatingTimesABV / sumOfRatings;
+}

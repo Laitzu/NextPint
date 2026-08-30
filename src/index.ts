@@ -1,6 +1,6 @@
 import type { Checkin } from "./models/Checkin";
 import { parseUntappdCSV } from "./services/UntappdDataParser";
-import { analyzeBeerStyles } from "./services/UserFlavourProfileService";
+import { analyzeABVPreference, analyzeBeerStyles } from "./services/UserFlavourProfileService";
 
 const uploadButton = document.getElementById("upload-button");
 
@@ -22,6 +22,8 @@ function handleFileUpload() {
         const flavourProfile = analyzeBeerStyles(checkins);
         const sortedFlavourProfile = new Map([...flavourProfile.entries()].sort((a, b) => b[1] - a[1]));
         console.log(sortedFlavourProfile)
+
+        console.log(analyzeABVPreference(checkins));
     };
     reader.readAsText(file);
 }
