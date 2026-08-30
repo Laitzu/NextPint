@@ -3,3 +3,17 @@
 // The flavour profile could use things like top 3 beer styles (e.g. IPA, Pale Lager, Stout) in the beginning
 
 // The ABV could also be used to determine some sort of simple preference (Low, Medium, High).
+
+import type { Checkin } from "../models/Checkin";
+
+
+export function analyzeBeerStyles(checkins: Checkin[]): Map<string, number> {
+    const styleCount = new Map<string, number>();
+
+    for (const checkin of checkins) {
+        const style = checkin.drink.drinkType;
+        styleCount.set(style, (styleCount.get(style) ?? 0) + 1);
+        }
+        return styleCount;
+    }
+
