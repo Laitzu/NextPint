@@ -2,14 +2,13 @@ import type { UntappdDrink } from '../models/UntappdDrink';
 import type { Checkin } from '../models/Checkin';
 
 export function parseUntappdCSV(content: string) : Checkin[] {
-
-    const columns: number = 32
     const checkInList: Checkin[] = [];
 
     // Lets first get the column numbers for the fields we care about.
     // This way the order of columns can change without breaking the parser.
     const headerLine: string = content.split("\n")[0];
     const headerFields: string[] = headerLine.split(",");
+    const columns = headerFields.length;
 
     const drink_id_col: number = headerFields.indexOf("bid");
     const drink_name_col: number = headerFields.indexOf("beer_name");
@@ -28,7 +27,7 @@ export function parseUntappdCSV(content: string) : Checkin[] {
 
     for (let line of content.split("\n").slice(1)) {
         // After slicing per newline, lets add one to the end of each line
-        // So we can parse the last field in the line.
+        // so we can parse the last field in the line.
         line = line + "\n";
 
         let field: string = "";

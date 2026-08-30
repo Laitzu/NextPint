@@ -26,3 +26,5 @@ dist-ssr
 
 # Test data and scripts
 /test_data/*
+/data/*
+/src/scripts/*

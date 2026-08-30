@@ -1,11 +1,15 @@
 export interface RetailDrink {
   untappdId?: string;
+  ean: string;
 
   retailChain?: string;
 
   name: string;
-  breweryName?: string;
-  breweryCountry?: string;
+  brand?: string;
+  brandCountry?: string;
+  price?: number;
+
+  storeCategory?: string;
 
   drinkType: string;
 
