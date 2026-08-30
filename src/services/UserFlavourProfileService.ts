@@ -17,7 +17,6 @@ export function analyzeBeerStyles(checkins: Checkin[]): Map<string, number> {
         return styleCount;
     }
 
-
 export function analyzeABVPreference(checkins: Checkin[]): number {
     let sumRatingTimesABV: number = 0;
     let sumOfRatings: number = 0;

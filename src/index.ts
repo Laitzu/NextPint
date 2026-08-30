@@ -1,6 +1,9 @@
 import type { Checkin } from "./models/Checkin";
 import { parseUntappdCSV } from "./services/UntappdDataParser";
 import { analyzeABVPreference, analyzeBeerStyles } from "./services/UserFlavourProfileService";
+import { loadRetailDrinksFromData } from "./services/RetailDrinkLoader";
+import rawKKaupatDrinks from "../data/k-ruoka/retail_drinks.json";
+import rawSKaupatDrinks from "../data/s-kaupat/retail_drinks.json";
 
 const uploadButton = document.getElementById("upload-button");
 
@@ -16,14 +19,31 @@ function handleFileUpload() {
     
     reader.onload = (e) => {
         const content = e.target?.result as string;
+
+        // Parse checkins into Checkin schema format
         const checkins: Checkin[] = parseUntappdCSV(content);
         console.log(checkins);
 
-        const flavourProfile = analyzeBeerStyles(checkins);
-        const sortedFlavourProfile = new Map([...flavourProfile.entries()].sort((a, b) => b[1] - a[1]));
-        console.log(sortedFlavourProfile)
+        // Count amount of beer styles user has checked in / tasted
+        const beerStyleCounts = analyzeBeerStyles(checkins);
+        const sortedBeerStyleCounts = new Map([...beerStyleCounts.entries()].sort((a, b) => b[1] - a[1]));
+        console.log(sortedBeerStyleCounts)
 
-        console.log(analyzeABVPreference(checkins));
+        // Record a naive analysis of preferred ABV through
+        // simple weighted average using the rating and ABF of drinks
+        // with the following formula:
+        // Sum(ABVs * DrinkRatings) / Sum(DrinkRatings)
+        const preferenceABV = analyzeABVPreference(checkins);
+        console.log(preferenceABV);
+
+        // Load K-Kaupat and S-Kaupat drinks to RetailDrink schema format
+        // from the semi-manually scraped and parsed product data
+
+        const KKaupatDrinks = loadRetailDrinksFromData(rawKKaupatDrinks);
+        const SKaupatDrinks = loadRetailDrinksFromData(rawSKaupatDrinks);
+        console.log(KKaupatDrinks);
+        console.log(SKaupatDrinks);
+
     };
     reader.readAsText(file);
 }
